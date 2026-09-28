@@ -1,0 +1,10 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default-strict-mtls
+  namespace: default
+spec:
+  mtls:
+    # Forces all communication paths within this namespace to use strict mutual TLS encryption
+    mode: STRICT
+

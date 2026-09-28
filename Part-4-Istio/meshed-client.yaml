@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-testing-client
+  namespace: default
+  labels:
+    app: secure-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: secure-client
+  template:
+    metadata:
+      labels:
+        app: secure-client
+    spec:
+      containers:
+      - name: curl-client
+        image: curlimages/curl
+        # Keeps the container running quietly so we can execute commands inside it
+        command: ["sleep", "infinity"]
