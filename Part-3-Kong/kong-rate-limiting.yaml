@@ -1,0 +1,33 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: global-rate-limit
+  namespace: default
+config:
+  # This means 5 requests per minute
+  minute: 5
+  policy: local
+plugin: rate-limiting
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: project-edge-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: kong
+    # Attaches the rate limiter execution policy directly to the ingress path
+    konghq.com/plugins: global-rate-limit
+spec:
+  rules:
+  - host: devops-project.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+

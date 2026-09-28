@@ -1,0 +1,31 @@
+# Deploy the controller and gateway side-by-side inside the exact same pod
+ingressController:
+  enabled: true
+  env:
+    # Forces the controller container to communicate internally via local loopback
+    kong_admin_url: "http://127.0.0.1:8001"
+
+# Expose standard unencrypted HTTP ports for simple local port-forwarding
+admin:
+  enabled: true
+  http:
+    enabled: true
+  tls:
+    enabled: false
+
+manager:
+  enabled: true
+  http:
+    enabled: true
+  tls:
+    enabled: false
+
+# Inject configuration routing variables straight into the gateway engine
+env:
+  database: "off"
+  admin_gui_url: "http://localhost:8002"
+  admin_gui_api_url: "http://localhost:8001"
+
+# Configure the system to act as a standard cloud LoadBalancer pool
+proxy:
+  type: LoadBalancer
